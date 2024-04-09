@@ -1,0 +1,33 @@
+SQL assessment:
+Name:Krithiksri Venkatachalam
+
+lab-1:
+
+1)select customerid,avg(dataused) from customerinteractions where month="march" group by customerid having avg(dataused) > (select avg(dataused) from customerinteractions where month="march")
+
+2)select customerid,callduration,month from customerinteractions order by month desc,CallDuration desc;
+
+3) select customerid,sum(messagecount),sum(dataused) from customerinteractions group by customerid order by sum(MessageCount) asc,sum(dataused) desc;
+
+lab-2:
+
+4)select producttypeid,sum(totalsalesamount) as total_sales from quarterlysales where producttypeid=1 group by producttypeid order by sum(TotalSalesAmount) desc;
+
+5)select ProductTypeID,sum(TotalSalesAmount) as total_Sales from quarterlysales where quarter="Q1" group by ProductTypeID order by total_sales desc;
+
+6)select avg(TotalSalesAmount/UnitsSold) from quarterlysales where ProductTypeID=1 and quarter="Q2";
+
+lab-3:
+
+7)select region,sum(ConsumptionKWh) as energy from sectorenergyconsumption where month="march" group by region having energy > (select avg(ConsumptionKWh) from sectorenergyconsumption);
+
+8)select sector,month,sum(ConsumptionKWh) as consume from sectorenergyconsumption group by sector,month order by month desc,consume asc;
+    
+9) select energysource,sum(consumptionkwh) as consume from sectorenergyconsumption group by EnergySource order by consume desc;
+
+lab-4:
+10)select customername from insurancepolicies where CustomerName in (select CustomerName from insurancepolicies where FeedbackScore >(select avg(FeedbackScore) from insurancepolicies)) and pendinginvestigation="no";
+
+11) select policytype,sum(AnnualPremium),avg(FeedbackScore) from insurancepolicies where  claimscount >1 group by policytype having avg(FeedbackScore) > (select avg(FeedbackScore) from insurancepolicies); 
+
+12) select policytype,avg(feedbackscore) from insurancepolicies group by policytype;
