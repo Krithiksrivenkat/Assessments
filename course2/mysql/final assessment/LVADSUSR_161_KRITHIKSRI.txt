@@ -1,0 +1,82 @@
+FINAL ASSESSMENT:
+
+lab-1:
+
+1)select product_category,avg(sales_amount) from sales_records s join products using(product_id)
+where date_sub(sales_date,interval 30 day)
+group by product_category;
+
+2) select product_id,sum(sales_amount) over (partition by product_id)as total from sales_records
+ order by total desc limit 3; 
+
+3)select customer_id,percent_rank() over (partition by customer_id order by sales_Amount) from sales_records;
+
+4) select customer_id,
+ case when year(sales_date)>year(now())-6 then "consistent buyers"
+ else "occasional buyers"
+ end as frequency from sales_records;
+
+lab-2:
+
+5)select flight_id,avg(ticket_price),departure_airport,arrival_airport
+ from tickets join flights using(flight_id)
+ group by flight_id;
+
+6)select f.flight_id,flight_number,departure_date,sum(ticket_price) as sold from flights f join tickets using(flight_id)
+where month(ticket_date)!=month(now())
+group by f.flight_id
+order by sold desc ;
+
+7)select p.passenger_id,passenger_name,sum(ticket_price) as total,frequent_flyer_status from passengers p join tickets
+using(passenger_id)
+group by p.passenger_id
+order by total desc;
+
+8)select month(ticket_date),sum(ticket_price) from tickets 
+group by month(ticket_date);
+
+lab-3:
+
+9)select player_id,game_id,avg(play_date) from playerscores
+ group by player_id,game_id;
+
+10)select game_id,game_name,count(player_id) as total from playerscores join games using(game_id)
+group by game_id
+order by total desc limit 3;
+
+11)select game_name,game_id,avg(score) as average_score,max(score) as highest_score,count(player_id) as players from playerscores join games using(game_id) group by game_id;
+
+12)select player_name,registration_date,play_date from players join playerscores using(player_id)
+where  day(registration_date)-day(play_date) < 30;
+
+lab-4:
+
+13)select doctor_id,sum(cost) as cost from treatments group by doctor_id order by cost desc limit 5;
+
+14)select treatment_name,sum(cost) as total_revenue,(sum(cost)/19500)*100 as percent
+ from treatments
+group by treatment_name with rollup;
+
+15)select patient_id,patient_name,admission_date,discharge_date from patients
+where (day(Admission_date)-day(discharge_date))<30
+order by admission_date asc;
+
+16)select gender ,round(avg(datediff(discharge_date,admission_date)),0) as LOS,group_concat(diagnosis) from patients group by gender;
+
+lab-5:
+
+17)select department,semester,avg(grade) from courses join enrollments using(course_id)
+group by department,semester
+order by department,semester;
+
+18)select major,enrollment_year,count(Student_id) as enroll from students join enrollments using(Student_id)
+group by major,enrollment_year
+order by enroll desc;
+
+19)select student_id,student_name,semester,sum(credits),enrollment_year from students join enrollments using(Student_id) join courses using(course_id)
+group by student_id,semester
+having sum(credits) > 50 ;
+
+20)select enrollment_year,course_name,count(e.student_id) as total,row_number() over (partition by enrollment_year order by course_name) as top_course 
+from enrollments e join students using(student_id) join courses using(course_id)
+group by enrollment_year,course_name;
